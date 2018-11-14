@@ -5,7 +5,7 @@ const options = {
   threshold: 1,
   waitThreshold: 2,
   circuitDuration: 20000,
-  statInterval: 2000
+  statInterval: 60000
 };
 
 const brake = new Brakes(options);
@@ -15,11 +15,10 @@ brake.on("failure", snapshot => {
 });
 
 brake.on("circuitClosed", () => {
-  console.log(`CIRCUIT CLOSED`);
+  console.log('CIRCUIT IS CLOSED');
 });
-
 brake.on("circuitOpened", () => {
-  console.log(`CIRCUIT OPENED`);
+  console.log('CIRCUIT IS OPEN');
 });
 
 brake.on("snapshot", snapshot => {

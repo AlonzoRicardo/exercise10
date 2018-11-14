@@ -8,11 +8,11 @@ const {
 } = require("express-json-validator-middleware");
 
 const kue = require("kue");
-let queue = kue.createQueue(/* {
+let queue = kue.createQueue({
   redis: {
     host: "redis"
   }
-} */);
+});
 module.exports = queue;
 
 const getMessages = require("./src/controllers/getMessages");

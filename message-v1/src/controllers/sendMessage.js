@@ -11,8 +11,8 @@ module.exports = function(msgData, done) {
   if (msgData.isThereBalance) {
     const postOptions = {
       // host: "exercise6_messageapp_1",
-      // host: "messageapp",
-      host: "localhost",
+       host: "messageapp",
+      //host: "localhost",
       port: 3000,
       path: "/message",
       method: "post",

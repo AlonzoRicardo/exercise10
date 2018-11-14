@@ -22,27 +22,27 @@ services:
       - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
     ports:
       - 48151:48151
-  #service-v1:
-  #  build: message-v1/
-  #  ports:
-  #    - 80
-  #  deploy:
-  #    replicas: 1
-  #  links:
-  #    - balancer
-  #    - messageapp
-  #    - mongodb_message
-  #    - replica_message
-  #    - redis
-  #    - credit
-  #  depends_on:
-  #    - messageapp
-  #    - mongodb_message
-  #    - replica_message
-  #    - redis
-  #  environment:
-  #  - PORT=9007
-  #  - SERVICE_NAME=service-v1
+  service-v1:
+    build: message-v1/
+    ports:
+      - 80
+    deploy:
+      replicas: 2
+    links:
+      - balancer
+      - messageapp
+      - mongodb_message
+      - replica_message
+      - redis
+      - credit
+    depends_on:
+      - messageapp
+      - mongodb_message
+      - replica_message
+      - redis
+    environment:
+    - PORT=9007
+    - SERVICE_NAME=service-v1
   #service-v2:
   #  image: rickalon/messagecanary:canary-for-message-service
   #  #build: message-v2/
