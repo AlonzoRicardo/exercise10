@@ -2,7 +2,7 @@ const kue = require("kue");
 let queue = require('../../../messagesIndex');
 const uuidv4 = require("uuid/v4");
 const debug = require("debug")("message:queue");
-
+const brake = require('../../../circuitBreaker');
 module.exports = function(req, res) {
   let uniqueId = uuidv4();
   let messObj = req.body;
@@ -13,7 +13,11 @@ module.exports = function(req, res) {
     })
     .ttl(6000)
     .save(function(err) {
-      if (!err) res.send(`MessageId: ${job.data.messObj.uuid}`);
+      if (!err && !brake.isOpen()) {
+        res.send(`MessageId: ${job.data.messObj.uuid}`)
+      } else if(brake.isOpen()) {
+        res.send(`The service is currently experiencing some issues, your request may be delayed! \n MessageId: ${job.data.messObj.uuid}`)
+      };
     });
 };
 
