@@ -3,15 +3,15 @@ const saveMessage = require("../clients/saveMessage");
 const debugError = require("debug")("message:error");
 const debugTimeout = require("debug")("message:timeout");
 const random = n => Math.floor(Math.random() * Math.floor(n));
-const braker = require('../../circuitBreaker')
+const braker = require("../../circuitBreaker");
+
 module.exports = function(msgData, done) {
   const entireMsg = msgData;
   const body = JSON.stringify(msgData.job);
 
   if (msgData.isThereBalance) {
     const postOptions = {
-      // host: "exercise6_messageapp_1",
-       host: "messageapp",
+      host: "messageapp",
       //host: "localhost",
       port: 3000,
       path: "/message",
@@ -41,11 +41,13 @@ module.exports = function(msgData, done) {
                   if (error) {
                     debugError(error);
                   } else {
+                    console.log('enters cb');
                     console.log(postRes.body);
                   }
                 }
-              );
-              return resolve('resolved succesfully');
+                );
+              done();
+              return resolve("resolved succesfully");
             } else {
               debugError("Error while sending message");
               saveMessage(
@@ -59,6 +61,7 @@ module.exports = function(msgData, done) {
                   debugError("Internal server error: SERVICE ERROR");
                 }
               );
+              done('err');
               return reject("Error while sending message");
             }
           });
@@ -80,15 +83,15 @@ module.exports = function(msgData, done) {
                 debugTimeout("Internal server error: TIMEOUT");
               }
             );
+            done('err');
             return reject(new Error("Timeout error"));
           });
 
           postReq.on("error", err => {
-            console.log(err, "<== error detected here");
+            debugError("err");
           });
           postReq.write(body);
           postReq.end();
-          done();
         });
       }
     }

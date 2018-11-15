@@ -18,13 +18,14 @@ function checkBalance(job, done) {
     if (current_credit > 0) {
       return true;
     } else {
+      done('err')
       return false;
     }
   });
 }
 
 
-function decreaseBalance(job, enoughBalance) {
+function decreaseBalance(job, enoughBalance, done) {
   const MessageModel = Message();
   let message = new MessageModel(job.data.messObj);
   return updateCreditTransaction(
@@ -43,6 +44,7 @@ function decreaseBalance(job, enoughBalance) {
         debugError(error);
         cb(undefined, error);
       } else {
+        done();
         addToQ(job, enoughBalance);
       }
     }
@@ -54,8 +56,7 @@ queue.process("check balance", function(job, done) {
   let promise = Promise.resolve(checkBalance(job, done));
   promise
     .then(response => {
-      if (response) decreaseBalance(job, response);
-      done();
+      if (response) decreaseBalance(job, response, done);
     })
     .catch(err => {
       debugError(err);

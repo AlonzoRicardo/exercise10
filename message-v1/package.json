@@ -8,7 +8,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=dev DEBUG=message:* nodemon messagesIndex.js ",
+    "start": "NODE_ENV=dev node messagesIndex.js ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
