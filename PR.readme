@@ -1,13 +1,14 @@
 Personal Report:
 
 ```
-    1.First i did was to reconfigure haproxy to properly work with consul.
-    2.Made new endpoint called /version that returns the service version.
-    3.Then specified a way to attack only the canary when sending a request with a header that equaled to = MISTERY_SHOPPER.
-    4.Stated environment variables in the docker-compose.yml, as one i already trying to make use of them in the haproxy.cfg
-    5.Deployed with several replicas and using the following command: ab -n 1000 localhost:48151/version
-    sent some requests and then by going to localhost:48151/haproxy monitored that the requests were being properly balanced.
-    6.Checked that my canary was being properly targeted when using the following 
-    command: ab -n 1000 -H "MISTERY_SHOPPER:" localhost/version.
+    1.Added brakes using brakes module.
+    2.Set the brakes to have a timeout of 1000ms, implemented stats that fire every minute.
+      Circuit refreshes its state every 20000ms.
+      Uber sensitivie threshold for the purpose of development.
+    3.Added circuit brake events to monitor the behaviour.
+    4.Set the worker to sleep if the external service is too problematic.
+      It also revives after 20000ms just when the circuit closes again.
+    5.Added different response messages when the client is experiencing different issues.
+    6.Added a back preassure that triggers at 10 jobs, and resumes at 5 jobs enqueued.
 
 ```

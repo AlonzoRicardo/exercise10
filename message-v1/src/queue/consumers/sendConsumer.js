@@ -6,7 +6,7 @@ const braker = require("../../../circuitBreaker");
 function reviveWorker(ctx) {
   setTimeout(() => {
     ctx.resume();
-  }, 10000);
+  }, 20000);
 }
 
 function checkIfOpened (ctx) {
